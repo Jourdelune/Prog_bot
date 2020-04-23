@@ -1,0 +1,355 @@
+import json
+
+from discord.utils import get
+
+import discord
+
+from discord.ext import commands
+
+import random
+
+
+import asyncio
+
+import random
+
+import sys
+
+from threading import Thread
+
+import time
+
+import random
+
+import sys
+
+import threading
+
+import time
+
+from pickle import load, dump
+    
+
+# une commmande
+# !regles =regles #regles
+
+# créer le bot
+bot = commands.Bot(command_prefix='!')
+warnings = {}
+
+
+#creer la liste sugestion
+stockage = []
+
+
+dictio = dict()
+global dictio
+str(dictio)
+
+
+    
+sauvedict = "sauvedict"
+
+# détecter quand le bot est pret ("allumé")
+@bot.event
+async def on_ready():
+    print("Bot ready")
+    await bot.change_presence(status=discord.Status.idle,
+            activity=discord.Game("!info"))
+
+   
+
+
+
+# détecter quand quelqu'un ajoute un emoji sur un message
+@bot.event
+async def on_raw_reaction_add(payload):
+
+    emoji = payload.emoji.name  # recupere l'emoji
+    canal = payload.channel_id  # recupere le numero du canal
+    message = payload.message_id  # recupere le numero du message
+
+    python_role = get(bot.get_guild(payload.guild_id).roles, name="python")
+    membre = bot.get_guild(payload.guild_id).get_member(payload.user_id)
+
+    # verifier si l'emoji qu'on a ajoutée est "python"
+    if canal == 700350381250838560 and message == 700350680677744761 and emoji == "python":
+        print("Grade added!")
+        await membre.add_roles(python_role)
+        await membre.send("You get the python grade!")
+
+
+
+# créer la commande !bienvenue @pseudo
+@bot.command()
+async def bienvenue(ctx, nouveau_membre: discord.Member):
+    # recupere le nom
+    pseudo = nouveau_membre.mention
+
+    # executer le message de bienvenue
+    await ctx.send("Welcome to {pseudo} on the discord server! Don't forget to do!".format(pseudo))
+
+# verifier l'erreur
+@bienvenue.error
+async def on_command_error(ctx, error):
+    # detecter cette erreur
+    if isinstance(error, commands.MissingRequiredArgument):
+        # envoyer un message
+        await ctx.send("You have to do! Welcome @ pseudo")
+
+
+
+@bot.command()
+async def suggestion(ctx, arg):
+    embed = discord.Embed(
+        title = "Suggestion",
+        description = "Your suggestion has been sent.",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send(embed=embed)
+    stockage.append(arg)
+    print(stockage)
+    
+
+@bot.command()
+async def stockage_code(ctx, clé, code):
+    embed = discord.Embed(
+        title = "code storage",
+        description = "Warning: if you forget the quotes: you will get only the first word of your code. Your code has been successfully stored.",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send(embed=embed)
+    dictio[clé] = str(code)
+    print(dictio)
+    #sauvegarde
+    dfg=open(sauvedict,'wb')
+    dump(dictio,dfg)
+    dfg.close()
+
+
+@bot.command()
+async def print_code(ctx, clé_envoie):
+    global dictio
+    with open("sauvedict", "rb") as dfg:
+        dictio = load(dfg)
+    str(dictio)
+    code_dire = dictio.get(clé_envoie)
+    str(code_dire)
+    embed = discord.Embed(
+        title = "send a code",
+        description = code_dire,
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send(embed=embed)
+
+
+
+@bot.command()
+async def site(ctx):
+    embed = discord.Embed(
+        title = "Prog_bot site",
+        description = "Here is the project site: https://jourdelune863.wixsite.com/progbot/",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send(embed=embed)
+
+    
+
+    
+
+# creer la commande code_source
+@bot.command()
+async def code_source(ctx):
+    embed = discord.Embed(
+        title = "Source code",
+        description = "Set of instructions written in a programming language that will form the program after compilation / interpretation. The source code is relatively easy for humans to understand, but it is not suitable for the machine.",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+
+# creer la commande invite
+@bot.command()
+async def invite(ctx):
+    embed = discord.Embed(
+        title = "Invite the bot to a discord server.",
+        description = "https://discordapp.com/api/oauth2/authorize?client_id=700681847742660721&permissions=0&scope=bot",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+
+
+    
+   
+
+# creer la commande instruction
+@bot.command()
+async def instruction(ctx):
+    embed = discord.Embed(
+        title = "instruction",
+        description = "Basic operation sent to the processor.",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+
+@bot.command()
+async def appelle_luxus(ctx):
+    embed = discord.Embed(
+        title = "appelle_luxus",
+        description = "Jourdelune veux vous parler @luxus#6978",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+
+
+
+
+# creer la commande appelle
+@bot.command()
+async def appelle(ctx):
+    embed = discord.Embed(
+        title = "appelle",
+        description = "Ai jour de bot dis à  @Jourdelune de se ramener stp @Jourdelune",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+
+# creer la commande hastebin
+@bot.command()
+async def hast(ctx):
+    embed = discord.Embed(
+        title = "hastebin",
+        description = "https://hastebin.com/",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+
+
+# creer la commande Pastebin
+@bot.command()
+async def past(ctx):
+    embed = discord.Embed(
+        title = "Pastebin",
+        description = "https://pastebin.com/",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+
+
+# creer la commande statut
+@bot.command()
+async def bot_info(ctx):
+    embed = discord.Embed(
+        title = "Prog_bot",
+        description = "This bot dedicated to programming is developed by @Jourdelune",
+        color = discord.Colour.green()
+        )
+    embed.set_footer(text='Posted on April 17, 2020')
+    embed.set_image(url='https://teknonews.fr/wp-content/uploads/2018/06/discord-logo.jpg')
+    embed.set_thumbnail(url='https://teknonews.fr/wp-content/uploads/2018/06/discord-logo.jpg')
+    embed.set_author(name='Jourdelune')
+    icon_url = 'https://teknonews.fr/wp-content/uploads/2018/06/discord-logo.jpg'
+    embed.add_field(name='Module used: discord.py', value='online', inline=False)
+    
+    
+    await ctx.send (embed=embed)
+
+# creer la commande info
+@bot.command()
+async def info(ctx):
+    embed = discord.Embed(
+        title = "information",
+        description = "The commands of the @Prog_bot bot are: \ n \ n _________________________________ \n\n!suggestion \"your suggestion \": write your suggestion between the quotes.\n\n!bot_info: allows to know the status of the bot and various information.\n\n!actu: information on the version of the bot, updated etc ...\n\n__________________\n\n!prompt: invite the bot discord. \n\n ___________________\n\n!bad_habit: expresses one of the bad habits not to take\n\n!info: sends the commands that the bot allows to perform.\n\n!hast: Send a hastebin link to write your code.\n\n!gith: send a GitHub link.\n\n!storage_code\"The name of your code\"\"Your code \": allows you to save your code.\n\n!print_code\"The name of your code \": allows you to post your code that you have stored.\n\n!instruction: definition of an instruction.\n\n!source_code: definition of a source code.",
+        color = discord.Colour.green()
+        )
+    embed.set_footer(text='Posted on April 17, 2020')
+    embed.set_image(url='https://teknonews.fr/wp-content/uploads/2018/06/discord-logo.jpg')
+    embed.set_thumbnail(url='https://teknonews.fr/wp-content/uploads/2018/06/discord-logo.jpg')
+    embed.set_author(name='Jourdelune')
+
+    
+    
+    await ctx.send (embed=embed)
+    
+    
+# creer la commande mauvaise habitude
+@bot.command()
+async def bad_habit(ctx):
+    a = random.choice(['want to reinvent the wheel all the time. With a 99% chance your problem has already been resolved somewhere. So why not googling when the problem seems complex to you? ',' Be a copy / paste oriented developer. Do not blindly copy / paste. It is necessary to try to understand the code first, as it may not do exactly what it claims to do; ',' be focused on coding. The actual coding isn\'t the thing developers spend the most time on. It is therefore necessary to take time on how to solve the problems before jumping on your keyboard; ',' use names giving no information on what the code does. A function name for example is supposed to give an idea of ​​what the piece of code does. Otherwise, it becomes difficult to read it again, because you have to go into detail to find out what it does; ',' want to minimize the number of lines in its code at all costs. Being obsessed with having short codes can cause you to sacrifice the readability of your code; ',' ignore error messages. Most of the time, error messages give you enough information to get an idea of ​​what\'s wrong with your code. So don\'t assume when you have an error in your code that you know what\'s wrong without first reading the error message carefully. Otherwise, you risk losing more time; ',' stubbornly wanting to solve problems without asking for help; ',' always postpone bug fixing; ',' wanting to deal with all problems with one tool . There is no real Swiss Army knife in programming. It is therefore necessary to have several strings to your bow and not to freeze to a single tool, a single language or a single technology. When you only have a hammer as a tool, you tend to see all problems as nails; ',' ignore the strengths and limits of the tools you use; ',' do not document or comment on your code; ' , 'ignore unit tests or consider them as a secondary task;', 'ignore proven development practices: code review, test-driven development (TDD), quality assurance (QA), etc. ; ',' dislike reading (documentation, online help, etc.); ',' want to optimize the code from the start. There is no need to try to optimize your code from the start to deal with all kinds of possible scenarios. This work should be saved for the end. Most often the requirements as defined at the beginning can change. You will therefore have wasted time trying to optimize your code from the start, and adapting the optimized code to new requirements may generate more errors; ',' not mastering its development tools and languages. If the tools and languages ​​you use regularly are still mysterious enough for you, it\'s a sign that you\'re probably using them badly. What should we expect from the result? ',' Consider simple codes as amateur codes. Writing simple code and being on the lookout for simplification in your code is not necessarily a sign of amateurism. On the contrary, this may be the best way to write clean and maintainable code; ',' do not explore a few tracks before asking for help. Before asking for help on a problem, you should try to solve it first and explore several avenues that have not worked. This allows you to better appreciate the solution provided to you and improve it if necessary.'])
+    embed = discord.Embed(
+        title = "bad habit",
+        description = a,
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+    return
+ 
+
+# creer la commande GitHub
+@bot.command()
+async def gith(ctx):
+    embed = discord.Embed(
+        title = "GitHub",
+        description = "https://github.com/",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+    
+    
+# creer la commande GitHub
+@bot.command()
+async def actu(ctx):
+    embed = discord.Embed(
+        title = "News",
+        description = "Alpha version: Addition of command, error correction. Regularly updated.",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+   
+   
+ 
+
+# creer la commande GitHub
+@bot.command()
+async def pub(ctx):
+    embed = discord.Embed(
+        title = "Our_pub",
+        description = "```-------------- Prog_bot ------------- `` `\ n \ n>: arrow_right: Are you interested in programming? \ N \ n> Do you have a server linked to this domain? \ n \ n> So this bot is made for you: robot: !!! \ n \ n >>> Prog_bot has numerous commands that allow you to store your code: thumbsup: \ n \ n >>> remember concepts in computer science, express bad habits not to take, shortcuts for hastebin links: heart:, GitHub. \ n \ n >>> A system that allows you to make your own suggestions on the bot with the command! suggestion 'suggestiongestion' and many other commands: mechanical_leg: !!! \ n \ n >>> If you want to invite the bot on your server, here is the link: https : //discordapp.com/api/oauth2/authorize? client_id = 700681847742660721 & permissions = 0 & scope = bot. \ n \ n >>> And the site: https://jourdelune863.wixsite.com/progbot/.All at your keyboard! !!: white_check_mark: ",
+        color = discord.Colour.blue()
+        )
+    
+    await ctx.send (embed=embed)
+
+
+# creer la commande regle
+@bot.command()
+async def rule(ctx):
+    embed = discord.Embed(
+        title = "regle",
+        description = "❯ 1. Respect and courtesy. Respectful behavior is asked of each member. It is not permissible to disrespect, insult or say anything that could harm the integrity of another member. Racist, xenophobic, homophobic, or any other hateful or offensive language that is strictly prohibited. Trolls are not allowed. \ N \ n \ n❯ 2. ImagesThe images displayed or sent, of a hateful, religious, political, sexual, homophobic nature or in any character that could harm anyone or be a source of conflicts are prohibited. \ n \ n \ n❯ 3. Audio equipmentPlease have suitable audio equipment. Genes towards other users caused by defective hardware or by a bad software configuration must be absolutely avoided. The incongruous noises, radios, or other unwanted noise are not accepted. ",
+        color = discord.Colour.red()
+        )
+    
+    await ctx.send (embed=embed)
+
+
+
+# phrase
+print("Lancement du bot...")
+
+# connecter au serveur
+bot.run("NzAwNjgxODQ3NzQyNjYwNzIx.XqAIew.CwVSO2CCM2X3I671ib60LEBuwpI")
+
